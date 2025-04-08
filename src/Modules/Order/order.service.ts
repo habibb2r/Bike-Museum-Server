@@ -5,8 +5,9 @@ import { Order } from './order.model';
 const createOrderIntoDB = async (orderData: TOrder) => {
   const order = new Order(orderData);
   const productId = order.product;
-  const isProductExist =
-    await ProductServices.getSpecificProductFromDB(productId);
+  const isProductExist = await ProductServices.getSingleProduct(
+    productId.toString(),
+  );
   if (!isProductExist) {
     throw new Error('Resource not found');
   }
@@ -16,7 +17,7 @@ const createOrderIntoDB = async (orderData: TOrder) => {
       quantity: updateQuantity,
       inStock: updateQuantity > 0,
     };
-    await ProductServices.updateSpecificProductFromDB(productId, updateData);
+    await ProductServices.updateProduct(productId.toString(), updateData);
     const result = await order.save();
     return result;
   } else {
