@@ -15,7 +15,7 @@ const createProduct = catchAsync(async (req, res) => {
 });
 
 const getProducts = catchAsync(async (req, res) => {
-  const result = await ProductServices.getAllProducts(req.query);
+  const result = await ProductServices.getProducts(req.query);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -25,8 +25,9 @@ const getProducts = catchAsync(async (req, res) => {
 });
 
 const getSingleProduct = catchAsync(async (req, res) => {
-  const id = req.params.ProductId;
-  const result = await ProductServices.getSpecificProduct(id);
+  console.log(req.params);
+  const id = req.params.productId;
+  const result = await ProductServices.getSingleProduct(id);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -36,9 +37,9 @@ const getSingleProduct = catchAsync(async (req, res) => {
 });
 
 const updateProduct = catchAsync(async (req, res) => {
-  const id = req.params.ProductId;
+  const id = req.params.productId;
   const payload = req.body;
-  const result = await ProductServices.updateSpecificProduct(id, payload);
+  const result = await ProductServices.updateProduct(id, payload);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -49,7 +50,7 @@ const updateProduct = catchAsync(async (req, res) => {
 
 const deleteProduct = catchAsync(async (req, res) => {
   const id = req.params.ProductId;
-  const result = await ProductServices.deleteSpecificProduct(id);
+  const result = await ProductServices.deleteProduct(id);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,

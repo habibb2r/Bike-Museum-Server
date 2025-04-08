@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { TProduct } from './products.interface';
+import { TProduct, TProductModel } from './products.interface';
 import productMiddleware from './product.middleware';
 
 export const productSchema = new Schema<TProduct>(
@@ -23,4 +23,22 @@ export const productSchema = new Schema<TProduct>(
 
 productMiddleware()
 
-export const Product = model<TProduct>('Product', productSchema);
+productSchema.statics.createOrUpdate = async function (data: TProduct) {
+  const { name, brand, quantity } = data;
+
+  const existingProduct = await this.findOne({
+    name,
+    brand,
+    isDeleted: false,
+  });
+
+  if (existingProduct) {
+    existingProduct.quantity += quantity;
+    return existingProduct.save();
+  } else {
+    return this.create(data);
+  }
+};
+
+
+export const Product = model<TProduct, TProductModel>('Product', productSchema);

@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+import { Model } from "mongoose";
+
 export type TProduct = {
   name: string;
   brand: string;
@@ -12,3 +15,6 @@ export type TProduct = {
   updatedAt?: Date;
 };
 
+export interface TProductModel extends Model<TProduct> {
+  createOrUpdate(data: TProduct): Promise<TProduct>;
+}
