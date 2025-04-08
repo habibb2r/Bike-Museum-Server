@@ -1,7 +1,7 @@
 import { ProductServices } from './products.service';
-import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { StatusCodes } from 'http-status-codes';
+import catchAsync from '../../utils/catchAsync';
 
 const createProduct = catchAsync(async (req, res) => {
   const payload = req.body;
