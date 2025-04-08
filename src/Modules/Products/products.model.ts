@@ -1,59 +1,44 @@
 import { model, Schema } from 'mongoose';
-import { ProductModel, TProduct } from './products.interface';
+import { TProduct, TProductModel } from './products.interface';
+import productMiddleware from './product.middleware';
 
-const ProductSchema = new Schema<TProduct>(
+export const productSchema = new Schema<TProduct>(
   {
-    name: {
-      type: String,
-      trim: true,
-      maxlength: [30, 'Product name must be at most 30 characters'],
-      required: [true, 'Product name is required'],
-    },
-    brand: {
-      type: String,
-      trim: true,
-      maxlength: [30, 'Product brand must be at most 30 characters'],
-      required: [true, 'Product brand is required'],
-    },
-    price: {
-      type: Number,
-      minlength: [1, 'Product price must be at least 1'],
-      required: [true, 'Product price is required'],
-    },
+    name: { type: String, required: true, trim: true },
+    brand: { type: String, required: true, trim: true },
+    price: { type: Number, required: true },
     category: {
       type: String,
-      enum: {
-        values: ['Mountain', 'Road', 'Hybrid', 'Electric'],
-        message: '{VALUE} is not a valid product category',
-      },
-      required: [true, 'Product category is required'],
+      required: true,
+      enum: ['Mountain', 'Road', 'Hybrid', 'Electric'],
     },
-    description: {
-      type: String,
-      required: [true, 'Product description is required'],
-    },
-    quantity: {
-      type: Number,
-      minlength: [1, 'Product quantity must be at least 1'],
-      required: [true, 'Product quantity is required'],
-    },
+    photo: { type: String},
+    description: { type: String, required: true },
+    quantity: { type: Number, required: true },
     inStock: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
 
-ProductSchema.pre('find', function (next) {
-  this.find({ isDeleted: { $ne: true } });
-  next();
-});
-ProductSchema.pre('findOne', function (next) {
-  this.find({ isDeleted: { $ne: true } });
-  next();
-});
-ProductSchema.pre('findOneAndUpdate', function (next) {
-  this.find({ isDeleted: { $ne: true } });
-  next();
-});
+productMiddleware()
 
-export const Product = model<TProduct, ProductModel>('Product', ProductSchema);
+productSchema.statics.createOrUpdate = async function (data: TProduct) {
+  const { name, brand, quantity } = data;
+
+  const existingProduct = await this.findOne({
+    name,
+    brand,
+    isDeleted: false,
+  });
+
+  if (existingProduct) {
+    existingProduct.quantity += quantity;
+    return existingProduct.save();
+  } else {
+    return this.create(data);
+  }
+};
+
+
+export const Product = model<TProduct, TProductModel>('Product', productSchema);

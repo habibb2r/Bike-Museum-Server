@@ -1,12 +1,18 @@
 import express from 'express';
 import { ProductController } from './products.controller';
+import validateRequest from '../../middlewares/validateRequest';
+import { productValidation } from './products.validation';
 
 const router = express.Router();
 
-router.post('/', ProductController.createProduct);
-router.get('/', ProductController.getAllProducts);
-router.get('/:productId', ProductController.getSpecificProduct);
-router.put('/:productId', ProductController.updateSpecificProduct);
-router.delete('/:productId', ProductController.deleteSpecificProduct);
+router.post(
+  '/create-product',
+  validateRequest(productValidation.productValidationSchema),
+  ProductController.createProduct,
+);
+router.put('/:productId', ProductController.updateProduct);
+router.get('/:productId', ProductController.getSingleProduct);
+router.get('/', ProductController.getProducts);
+router.delete('/:productId', ProductController.deleteProduct);
 
 export const ProductRoutes = router;

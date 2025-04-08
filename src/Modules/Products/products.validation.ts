@@ -1,28 +1,42 @@
 import { z } from 'zod';
 
-const ProductValidation = z.object({
+export const productValidationSchema = z.object({
   name: z
-    .string()
+    .string({
+      required_error: 'Product name is required',
+    })
     .trim()
     .max(30, 'Product name must be at most 30 characters')
-    .refine(
-      (value) => value.charAt(0).toUpperCase() + value.slice(1) === value,
-      {
-        message: 'Product name must be capitalized',
-      },
-    ),
+ ,
   brand: z
-    .string()
+    .string({
+      required_error: 'Product brand is required',
+    })
     .trim()
     .max(30, 'Product brand must be at most 30 characters'),
-  price: z.number().min(1, 'Product price must be at least 1'),
-  category: z.enum(['Mountain', 'Road', 'Hybrid', 'Electric']),
-  description: z.string(),
-  quantity: z.number().min(1, 'Product quantity must be at least 1'),
+  price: z
+    .number({
+      required_error: 'Product price is required',
+      invalid_type_error: 'Product price must be a number',
+    })
+    .min(1, 'Product price must be at least 1'),
+  category: z.enum(['Mountain', 'Road', 'Hybrid', 'Electric'], {
+    required_error: 'Product category is required',
+    invalid_type_error: 'Invalid product category',
+  }),
+  description: z.string({
+    required_error: 'Product description is required',
+  }),
+  quantity: z
+    .number({
+      required_error: 'Product quantity is required',
+      invalid_type_error: 'Product quantity must be a number',
+    })
+    .min(1, 'Product quantity must be at least 1'),
   inStock: z.boolean().default(true),
   isDeleted: z.boolean().default(false),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });
 
-export default ProductValidation;
+export const productValidation = { productValidationSchema };
