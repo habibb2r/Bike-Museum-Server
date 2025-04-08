@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import bcrypt from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../ErrorHandlers/AppError';
@@ -65,6 +66,7 @@ const updateUserProfileInDB = async (payload: any) => {
     );
     const result = data?.modifiedCount > 0 ? { name: payload?.name } : {};
     return result;
+  // eslint-disable-next-line no-unused-vars
   } catch (error) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
