@@ -1,10 +1,9 @@
-import { Model } from 'mongoose';
-
 export type TProduct = {
   name: string;
   brand: string;
   price: number;
   category: 'Mountain' | 'Road' | 'Hybrid' | 'Electric';
+  photo?:string;
   description: string;
   quantity: number;
   inStock: boolean;
@@ -13,11 +12,3 @@ export type TProduct = {
   updatedAt?: Date;
 };
 
-export type TOrder = {
-  email: string;
-  product: string;
-  quantity: number;
-  totalPrice: number;
-};
-
-export type ProductModel = Model<TProduct>;

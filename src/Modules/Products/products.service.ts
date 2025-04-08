@@ -2,13 +2,13 @@ import { TProduct } from './products.interface';
 import { Product } from './products.model';
 import mongoose from 'mongoose';
 
-const createProductIntoDB = async (productData: TProduct) => {
+const createProduct= async (productData: TProduct) => {
   const product = new Product(productData);
   const result = await product.save();
   return result;
 };
 
-const getAllProductsFromDB = async (searchTerm: string) => {
+const getAllProducts = async (searchTerm: any) => {
   if (searchTerm) {
     const result = await Product.find(
       {
@@ -27,7 +27,7 @@ const getAllProductsFromDB = async (searchTerm: string) => {
   }
 };
 
-const getSpecificProductFromDB = async (
+const getSpecificProduct = async (
   productId: mongoose.Types.ObjectId | string,
 ) => {
   const ObajectId = mongoose.Types.ObjectId;
@@ -38,7 +38,7 @@ const getSpecificProductFromDB = async (
   return result;
 };
 
-const updateSpecificProductFromDB = async (
+const updateSpecificProduct = async (
   productId: mongoose.Types.ObjectId | string,
   updateData: Partial<TProduct>,
 ) => {
@@ -51,7 +51,7 @@ const updateSpecificProductFromDB = async (
   return result;
 };
 
-const deleteSpecificProductFromDB = async (
+const deleteSpecificProduct = async (
   productId: mongoose.Types.ObjectId | string,
 ) => {
   const ObajectId = mongoose.Types.ObjectId;
@@ -73,9 +73,9 @@ const deleteSpecificProductFromDB = async (
 };
 
 export const ProductServices = {
-  createProductIntoDB,
-  getAllProductsFromDB,
-  getSpecificProductFromDB,
-  updateSpecificProductFromDB,
-  deleteSpecificProductFromDB,
+  createProduct,
+  getAllProducts,
+  getSpecificProduct,
+  updateSpecificProduct,
+  deleteSpecificProduct,
 };
