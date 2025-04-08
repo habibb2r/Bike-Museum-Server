@@ -2,11 +2,12 @@ import express from 'express';
 import { ProductController } from './products.controller';
 import validateRequest from '../../middlewares/validateRequest';
 import { productValidation } from './products.validation';
+import verifyAdmin from '../../middlewares/verifyAdmin';
 
 const router = express.Router();
 
 router.post(
-  '/create-product',
+  '/create-product', verifyAdmin,
   validateRequest(productValidation.productValidationSchema),
   ProductController.createProduct,
 );
