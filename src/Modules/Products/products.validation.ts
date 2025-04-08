@@ -6,8 +6,7 @@ export const productValidationSchema = z.object({
       required_error: 'Product name is required',
     })
     .trim()
-    .max(30, 'Product name must be at most 30 characters')
- ,
+    .max(30, 'Product name must be at most 30 characters'),
   brand: z
     .string({
       required_error: 'Product brand is required',
@@ -39,4 +38,9 @@ export const productValidationSchema = z.object({
   updatedAt: z.date().optional(),
 });
 
-export const productValidation = { productValidationSchema };
+const updateProductValidationSchema = productValidationSchema.partial();
+
+export const productValidation = {
+  productValidationSchema,
+  updateProductValidationSchema,
+};
