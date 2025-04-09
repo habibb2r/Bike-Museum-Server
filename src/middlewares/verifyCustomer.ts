@@ -34,7 +34,7 @@ const verifyCustomer = catchAsync(
       throw new AppError(httpStatus.FORBIDDEN, 'This user is deactivated !🤦‍♂️');
     }
     if (role === 'customer' || role === 'admin') {
-      req.user = decoded as JwtPayload & { role: string };
+      (req as any).user = decoded as JwtPayload & { role: string };
       next();
     } else {
       throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized 😑!');

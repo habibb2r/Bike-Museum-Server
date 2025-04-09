@@ -32,7 +32,7 @@ const verifyAdmin = catchAsync(
       throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized 😏!');
     }
 
-    req.user = decoded as JwtPayload & { role: string };
+    (req as any).user = decoded as JwtPayload & { role: string };
     next();
   },
 );
