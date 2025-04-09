@@ -10,7 +10,7 @@ export const productSchema = new Schema<TProduct>(
     category: {
       type: String,
       required: true,
-      enum: ['Mountain', 'Road', 'Hybrid', 'Electric'],
+      enum: ['Mountain', 'Road', 'Hybrid', 'Electric', 'sports'],
     },
     photo: { type: String},
     description: { type: String, required: true },
