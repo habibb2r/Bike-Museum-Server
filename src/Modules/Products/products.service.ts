@@ -58,6 +58,26 @@ const getSingleProduct = async (ProductId: string) => {
   return result;
 };
 
+const getProductsWithFilterFromDB = async () => {
+  return await Product.aggregate([
+    {
+      $group: {
+        _id: null,
+        brands: { $addToSet: "$brand" },
+        categories: { $addToSet: "$model" }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        brands: 1,
+        categories: 1
+      }
+    }
+  ]);
+
+}
+
 const updateProduct = async (ProductId: string, payload: Partial<TProduct>) => {
   const result = await Product.findByIdAndUpdate(ProductId, payload, {
     new: true,
@@ -78,6 +98,7 @@ export const ProductServices = {
   createProduct,
   getProducts,
   getSingleProduct,
+  getProductsWithFilterFromDB,
   updateProduct,
   deleteProduct,
 };

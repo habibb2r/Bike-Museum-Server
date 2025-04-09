@@ -11,9 +11,10 @@ router.post(
   validateRequest(productValidation.productValidationSchema),
   ProductController.createProduct,
 );
-router.put('/:productId', ProductController.updateProduct);
-router.get('/:productId', ProductController.getSingleProduct);
 router.get('/', ProductController.getProducts);
+router.get('/:productId', ProductController.getSingleProduct);
+router.get('/products-with-filtering', ProductController.getSingleProduct);
+router.put('/:productId', ProductController.updateProduct);
 router.delete('/:productId', ProductController.deleteProduct);
 
 export const ProductRoutes = router;
