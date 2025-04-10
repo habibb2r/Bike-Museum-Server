@@ -1,20 +1,24 @@
-import express from 'express';
 import { ProductController } from './products.controller';
 import validateRequest from '../../middlewares/validateRequest';
 import { productValidation } from './products.validation';
 import verifyAdmin from '../../middlewares/verifyAdmin';
+import { Router } from 'express';
 
-const router = express.Router();
+const productRoutes = Router();
 
-router.post(
+productRoutes.get('/category-and-brand', ProductController.getProductsCateAndBrand);
+productRoutes.post(
   '/create-product', verifyAdmin,
   validateRequest(productValidation.productValidationSchema),
   ProductController.createProduct,
 );
-router.get('/', ProductController.getProducts);
-router.get('/:productId', ProductController.getSingleProduct);
-router.get('/products-with-filtering', ProductController.getSingleProduct);
-router.put('/:productId', ProductController.updateProduct);
-router.delete('/:productId', ProductController.deleteProduct);
+productRoutes.get('/', ProductController.getProducts);
+productRoutes.put(
+  '/:productId',
+  validateRequest(productValidation.updateProductValidationSchema),
+  ProductController.updateProduct,
+);
+productRoutes.get('/:productId', ProductController.getSingleProduct);
+productRoutes.delete('/:productId', ProductController.deleteProduct);
 
-export const ProductRoutes = router;
+export default productRoutes

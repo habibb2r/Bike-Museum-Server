@@ -1,5 +1,5 @@
-import { model, Schema } from 'mongoose';
-import { OrderModel, TOrder } from './order.interface';
+import { model, Schema } from "mongoose"
+import type { OrderModel, TOrder } from "./order.interface"
 
 const orderSchema = new Schema(
   {
@@ -16,17 +16,17 @@ const orderSchema = new Schema(
     quantity: {
       type: Number,
       required: true,
-      min: [1, 'Quantity must be at least 1'],
+      min: [1, "Quantity must be at least 1"],
     },
     totalPrice: {
       type: Number,
       required: true,
-      min: [0, 'Total price must be a positive number'],
+      min: [0, "Total price must be a positive number"],
     },
   },
   {
     timestamps: true,
   },
-);
+)
 
-export const Order = model<TOrder, OrderModel>('Order', orderSchema);
+export const Order = model<TOrder, OrderModel>("Order", orderSchema)
