@@ -1,13 +1,14 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { ProductRoutes } from './Modules/Products/products.route';
-import { OrderRoutes } from './Modules/Order/order.route';
+import productRoutes from './Modules/Products/products.route';
+
 import globalErrorHandler from './middlewares/globalErrorHandler';
 import { routeNotFoundHandler } from './middlewares/routeNotFound';
 import AuthRouter from './Modules/Auth/auth.route';
 const app: Application = express();
 import cookieParser from 'cookie-parser';
 import UserRouter from './Modules/User/user.route';
+import OrderRoutes from './Modules/Order/order.route';
 //parser
 
 app.use(express.json());
@@ -19,7 +20,7 @@ app.use(
   }),
 );
 
-app.use('/api/products', ProductRoutes);
+app.use('/api/products', productRoutes);
 app.use('/api/orders', OrderRoutes);
 app.use('/api/auth', AuthRouter);
 app.use('/api/user', UserRouter);
