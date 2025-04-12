@@ -1,18 +1,16 @@
-import { Request, Response } from "express";
-import { Order } from "../Order/order.model";
-import sendResponse from "../../utils/sendResponse";
-import { StatusCodes } from "http-status-codes";
+import { Request, Response } from 'express';
+import { Order } from '../Order/order.model';
 
 export const successPayment = async (req: Request, res: Response) => {
-    await Order.findOneAndUpdate(
-      { transactionId: req.params.tran_id },
-      { status: 'paid' },
-      { new: true },
+  const order = await Order.findOneAndUpdate(
+    { transactionId: req.params.tran_id },
+    { status: 'paid' },
+    { new: true },
+  );
+
+  if (order) {
+    res.redirect(
+      `http://localhost:5173/payment/success/${req.params.tran_Id}`,
     );
-  
-    sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      message: 'Successfully created Product',
-      data: this,
-    });
-  };
+  }
+};

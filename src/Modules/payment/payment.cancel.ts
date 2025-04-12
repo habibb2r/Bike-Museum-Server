@@ -1,5 +1,3 @@
-import { StatusCodes } from "http-status-codes";
-import sendResponse from "../../utils/sendResponse";
 import { Order } from "../Order/order.model";
 import { Product } from "../Products/products.model";
 import { Request, Response } from "express";
@@ -18,10 +16,10 @@ export const cancelPayment = async (req: Request, res: Response) => {
       });
     }
   
-    sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      message: 'Cancelled Payment',
-      data: updatedOrder,
-    });
+if(updatedOrder){
+  res.redirect(
+    `http://localhost:5173/payment/cancel/${req.params.tran_Id}`,
+  );
+}
   };
   

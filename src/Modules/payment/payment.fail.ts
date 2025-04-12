@@ -1,5 +1,3 @@
-import { StatusCodes } from "http-status-codes";
-import sendResponse from "../../utils/sendResponse";
 import { Order } from "../Order/order.model";
 import { Product } from "../Products/products.model";
 import { Request, Response } from "express";
@@ -17,11 +15,11 @@ export const failedPayment = async (req: Request, res: Response) => {
         $set: { inStock: true },
       });
     }
-  
-    sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      message: 'Failed Payment',
-      data: updatedOrder,
-    });
+
+    if(updatedOrder){
+      res.redirect(
+        `http://localhost:5173/payment/failed/${req.params.tran_Id}`,
+      );
+    }
   };
   
