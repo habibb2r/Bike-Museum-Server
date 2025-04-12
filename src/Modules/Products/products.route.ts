@@ -11,6 +11,14 @@ router.post(
   validateRequest(productValidation.productValidationSchema),
   ProductController.createProduct,
 );
+router.put(
+  '/:productId',
+  validateRequest(productValidation.updateProductValidationSchema),
+  ProductController.updateProduct,
+);
+
+
+router.get('/:productId', ProductController.getSingleProduct);
 router.get('/', ProductController.getProducts);
 router.get('/:productId', ProductController.getSingleProduct);
 router.get('/products-with-filtering', ProductController.getSingleProduct);
