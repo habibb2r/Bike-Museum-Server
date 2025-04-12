@@ -6,24 +6,12 @@ import sendResponse from "../../utils/sendResponse";
 import config from "../../config";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
-    const getData = req.body;
-    const userData ={
-      ...getData,
-      isBlocked:false,
-      isActive:true,
-      role:'customer',
-      photoURL:"https://res.cloudinary.com/dairs3nkn/image/upload/v1744097456/habibb2r/zuoz1s1iqhzf8t0ioylo.jpg"
-  
-    }
-    
-    const result = await AuthServices.createUserIntoDB(userData);
+
+    const result = await AuthServices.createUserIntoDB(req.body);
     sendResponse(res, {
       success: true,
       message: 'User created successfully',
-      data: {
-        name: result.name,
-        email: result.email,
-      },
+      data: result,
       statusCode: StatusCodes.ACCEPTED,
     });
   });

@@ -8,16 +8,18 @@ import AuthRouter from './Modules/Auth/auth.route';
 const app: Application = express();
 import cookieParser from 'cookie-parser';
 import UserRouter from './Modules/User/user.route';
+import bodyParser from 'body-parser';
 //parser
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'http://localhost:5000'],
+    origin: ['http://localhost:5173', 'http://localhost:5000', 'https://bike-museum.vercel.app'],
     credentials: true,
   }),
 );
+app.use(bodyParser.json());
 
 app.use('/api/products', ProductRoutes);
 app.use('/api/orders', OrderRoutes);

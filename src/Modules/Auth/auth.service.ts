@@ -39,7 +39,7 @@ const loginService = async (payload: TLoginUser) => {
       name: user?.name,
       email: user?.email,
       role: user?.role,
-      photoURL: user?.photoURL,
+      imageUrl: user?.imageUrl,
     },
   };
 };
