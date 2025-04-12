@@ -10,10 +10,10 @@ const createUserSchema = new Schema<TCreateUser, TLogin>(
       name: { type: String, required: true, trim: true },
       email: { type: String, required: true, unique: true },
       password: { type: String, required: true },
-      role: { type: String, enum: ['admin', 'customer'], required: true },
+      role: { type: String, enum: ['admin', 'user'], required: true },
       isBlocked: { type: Boolean, default: false, required: true },
       isActive: { type: Boolean, default: false, required: true },
-      photoURL: { type: String, required:true},
+      imageUrl: { type: String, required:true},
     },
     {
       timestamps: true,
