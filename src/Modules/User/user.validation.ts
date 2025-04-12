@@ -18,13 +18,12 @@ const userSchema = z.object({
 
 
 const UpdateUserValidationSchema = z.object({
-    body: z.object({
       name: z.string().optional(),
       email: z.string().email().optional(),
       password: z.string().optional(),
       role: z.enum(['admin', 'customer']).optional().default('customer'),
       isBlocked: z.boolean().optional().default(false),
-    }),
+
   });
 
 export const UserValidation = { userSchema, UpdateUserValidationSchema };

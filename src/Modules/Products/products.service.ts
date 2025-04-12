@@ -30,7 +30,7 @@ const getProducts = async (query: Record<string, unknown>) => {
   const filterQuery = searchQuery.find(queryObj);
 
   const page = Number(query?.page || 1);
-  const limit = Number(query?.limit || 10);
+  const limit = Number(query?.limit );
   const skip = (page - 1) * limit;
   const paginatedQuery = filterQuery.skip(skip).limit(limit);
 

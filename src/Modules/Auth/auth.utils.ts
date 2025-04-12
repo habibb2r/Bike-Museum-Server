@@ -6,6 +6,11 @@ export const generateToken = (
   secret: string,
   expiresIn: string,
 ) => {
+
+  const secrets = process.env.JWT_SECRET;
+  if (!secrets) {
+    throw new Error("JWT_SECRET is not defined in environment variables");
+  }
   const token = jwt.sign(jwtPayload, secret, { expiresIn });
   return token;
 };
