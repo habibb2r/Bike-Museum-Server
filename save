@@ -1,9 +1,0 @@
-// await Order.findOneAndUpdate(
-//     { transactionId: req.params.tran_id},
-//     { status: 'paid' },
-//     { new: true },
-//   );
-
-
-  // const currentOrder = await Order.findOne({ transactionId: req.body.tran_id });
-  // const tran_id = currentOrder?.transactionId ? currentOrder.transactionId : Date.now();

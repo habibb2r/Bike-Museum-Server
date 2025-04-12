@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.post("/create-order", validateRequest(OrderValidation.orderValidationSchema), OrderController.createOrder)
 router.get("/", OrderController.getOrders)
-router.delete('/:productId', );
+router.delete('/:id', );
 
 router.get("/revenue", OrderController.getRevenue)
 

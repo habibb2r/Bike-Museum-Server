@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { Request, Response } from 'express';
 import SSLCommerzPayment from 'sslcommerz-lts';
 import { Product } from '../Products/products.model';
+import { createUserModel } from '../User/user.model';
 
 const store_id = process.env.STORE_ID;
 const store_passwd = process.env.STORE_PASS;
@@ -17,21 +18,24 @@ export const initiatePayment = async (req: Request, res: Response) => {
   const orderData = req.body;
   const orderProduct = await Product.findById(orderData.product);
   const tran_id = orderData.transactionId;
+  const currentUser = await createUserModel.findById(orderData.user)
+  const name = currentUser?.name
+  const email = currentUser?.email
 
   const data = {
     total_amount: tran_id,
     currency: 'BDT',
     tran_id: tran_id,
-    success_url: `http://localhost:5000/api/payment/success/${tran_id}`,
-    fail_url: `http://localhost:5000/api/payment/failed/${tran_id}`,
-    cancel_url: `http://localhost:5000/api/payment/cancel/${tran_id}`,
+    success_url: `https://bike-museum-server-tan.vercel.app/api/payment/success/${tran_id}`,
+    fail_url: `https://bike-museum-server-tan.vercel.app/api/payment/failed/${tran_id}`,
+    cancel_url: `https://bike-museum-server-tan.vercel.app/api/payment/cancel/${tran_id}`,
     ipn_url: 'http://localhost:5000/ipn',
     shipping_method: 'Courier',
     product_name: orderProduct?.name,
     product_category: orderProduct?.category,
     product_profile: 'general',
-    cus_name: 'demo',
-    cus_email: orderData.email,
+    cus_name: name,
+    cus_email: email,
     cus_add1: orderData.address,
     cus_add2: orderData.address,
     cus_city: 'Dhaka',
@@ -41,7 +45,7 @@ export const initiatePayment = async (req: Request, res: Response) => {
     cus_phone: orderData.phone,
     cus_fax: '01711111111',
     ship_add1: orderData.address,
-    ship_name: 'demo',
+    ship_name: name,
     ship_city: 'dhaka',
     ship_postcode: '1000',
     ship_country: 'bd',
