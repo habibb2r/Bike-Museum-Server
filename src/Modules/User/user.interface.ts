@@ -4,10 +4,10 @@ export interface TCreateUser extends Document {
   name: string;
   email: string;
   password: string;
-  role: 'admin' | 'customer';
+  role: 'admin' | 'user';
   isBlocked: boolean;
   isActive: boolean;
-  photoURL: string;
+  imageUrl: string;
 }
 
 export interface TUpdateUserStatus {

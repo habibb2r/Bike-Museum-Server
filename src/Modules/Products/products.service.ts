@@ -1,6 +1,6 @@
 import type { TProduct } from "./products.interface"
 import { Product } from "./products.model"
-import type mongoose from "mongoose"
+
 
 const createProduct = async (payload: TProduct): Promise<TProduct> => {
   const result = await Product.createOrUpdate(payload) 
@@ -52,11 +52,32 @@ const getSingleProduct = async (ProductId: string) => {
   return result
 }
 
-const updateProduct = async (ProductId: string, payload: Partial<TProduct>, session?: mongoose.ClientSession) => {
-  const options = session ? { new: true, session } : { new: true }
-  const result = await Product.findByIdAndUpdate(ProductId, payload, options)
-  return result
+const getProductsWithFilterFromDB = async () => {
+  return await Product.aggregate([
+    {
+      $group: {
+        _id: null,
+        brands: { $addToSet: "$brand" },
+        categories: { $addToSet: "$model" }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        brands: 1,
+        categories: 1
+      }
+    }
+  ]);
+
 }
+
+const updateProduct = async (ProductId: string, payload: Partial<TProduct>) => {
+  const result = await Product.findByIdAndUpdate(ProductId, payload, {
+    new: true,
+  });
+  return result;
+};
 
 const deleteProduct = async (ProductId: string) => {
   const deleteSingleProduct = await Product.findOneAndUpdate({ id: ProductId }, { isDeleted: true }, { new: true })
@@ -67,6 +88,7 @@ export const ProductServices = {
   createProduct,
   getProducts,
   getSingleProduct,
+  getProductsWithFilterFromDB,
   updateProduct,
   deleteProduct,
 }
