@@ -6,11 +6,15 @@ import { productValidation } from './products.validation';
 const router = express.Router();
 
 router.post(
-  '/create-product',
+  '/create-product', 
   validateRequest(productValidation.productValidationSchema),
   ProductController.createProduct,
 );
-router.put('/:productId', ProductController.updateProduct);
+router.put(
+  '/:productId',
+  validateRequest(productValidation.updateProductValidationSchema),
+  ProductController.updateProduct,
+);
 router.get('/:productId', ProductController.getSingleProduct);
 router.get('/', ProductController.getProducts);
 router.delete('/:productId', ProductController.deleteProduct);

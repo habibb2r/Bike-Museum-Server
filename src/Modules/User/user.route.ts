@@ -1,13 +1,15 @@
 import { Router } from "express";
 import { UserController } from "./user.controller";
+import verifyAdmin from "../../middlewares/verifyAdmin";
+import verifyCustomer from "../../middlewares/verifyCustomer";
 
 
 const UserRouter = Router();
 
-UserRouter.get("/all", UserController.getAllUsers);
-UserRouter.get('/getSingle/:email', UserController.getSingleUser);
-UserRouter.patch('/update', UserController.updateUserStatus);
-UserRouter.patch('/update/user', UserController.updateUserProfile);
-UserRouter.patch('/update/password', UserController.updateUserPassword);
+UserRouter.get("/all", verifyAdmin, UserController.getAllUsers);
+UserRouter.get('/getSingle/:email', verifyCustomer, UserController.getSingleUser);
+UserRouter.patch('/update', verifyAdmin, UserController.updateUserStatus);
+UserRouter.patch('/update/user', verifyCustomer,  UserController.updateUserProfile);
+UserRouter.patch('/update/password', verifyCustomer,  UserController.updateUserPassword);
 
 export default UserRouter

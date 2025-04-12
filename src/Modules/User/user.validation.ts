@@ -21,7 +21,7 @@ const UpdateUserValidationSchema = z.object({
       name: z.string().optional(),
       email: z.string().email().optional(),
       password: z.string().optional(),
-      role: z.enum(['admin', 'customer']).optional().default('customer'),
+      role: z.enum(['admin', 'user']).optional().default('user'),
       isBlocked: z.boolean().optional().default(false),
 
   });
