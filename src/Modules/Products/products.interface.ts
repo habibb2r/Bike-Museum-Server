@@ -5,7 +5,7 @@ export type TProduct = {
   name: string;
   brand: string;
   price: number;
-  category: 'Mountain' | 'Road' | 'Hybrid' | 'Electric';
+  category: 'Mountain' | 'Road' | 'Hybrid' | 'Electric' | 'sports';
   photo?:string;
   description: string;
   quantity: number;

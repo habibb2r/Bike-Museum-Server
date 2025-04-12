@@ -25,7 +25,6 @@ const getProducts = catchAsync(async (req, res) => {
 });
 
 const getSingleProduct = catchAsync(async (req, res) => {
-  // console.log(req.params);
   const id = req.params.productId;
   const result = await ProductServices.getSingleProduct(id);
 

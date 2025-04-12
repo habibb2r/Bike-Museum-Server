@@ -1,95 +1,92 @@
-import { ProductServices } from "../Products/products.service"
-import type { TOrder } from "./order.interface"
-import { Order } from "./order.model"
-import AppError from "../../ErrorHandlers/AppError"
-import { StatusCodes } from "http-status-codes"
-import mongoose from "mongoose"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { TOrder } from './order.interface';
+import { Order } from './order.model';
+import AppError from '../../ErrorHandlers/AppError';
+import { StatusCodes } from 'http-status-codes';
+import mongoose from 'mongoose';
+import { Product } from '../Products/products.model';
 
-/**
- * Checks if a product has sufficient stock for an order
- */
-const checkStockAvailability = async (productId: string, quantity: number) => {
-  const product = await ProductServices.getSingleProduct(productId)
+const createOrder = async (payload: TOrder) => {
+  const OrderedProduct = await Product.findById(payload.product);
 
-  if (!product) {
-    throw new AppError(StatusCodes.NOT_FOUND, "Product not found")
+  if (!OrderedProduct) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Product not found');
   }
 
-  if (!product.inStock) {
-    throw new AppError(StatusCodes.BAD_REQUEST, `Product "${product.name}" is currently out of stock`)
+  if (OrderedProduct.quantity < 1) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Product is out of stock');
   }
 
-  if (product.quantity < quantity) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      `Insufficient stock for "${product.name}". Requested: ${quantity}, Available: ${product.quantity}`,
-    )
-  }
-
-  return product
-}
-
-const createOrderIntoDB = async (orderData: TOrder) => {
-  // Start a session for transaction
-  const session = await mongoose.startSession()
-  session.startTransaction()
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
   try {
-    const productId = orderData.product.toString()
+    const today = new Date();
+    const estimatedDeliveryDate = new Date(today.setDate(today.getDate() + 3));
 
-    // Check stock availability within the transaction
-    const product = await checkStockAvailability(productId, orderData.quantity)
+    payload.totalPrice = OrderedProduct.price;
+    payload.estimatedDeliveryDate = estimatedDeliveryDate;
 
-    // Calculate total price dynamically based on product price and quantity
-    const calculatedTotalPrice = product.price * orderData.quantity
+    const result = await Order.create([payload], { session });
 
-    // Create order with calculated total price
-    const orderWithPrice = {
-      ...orderData,
-      totalPrice: calculatedTotalPrice,
-    }
+    const newQty = OrderedProduct.quantity - 1;
 
-    // Update product quantity atomically within the transaction
-    const updateQuantity = product.quantity - orderData.quantity
-    const updateData = {
-      quantity: updateQuantity,
-      inStock: updateQuantity > 0,
-    }
+    await Product.findByIdAndUpdate(
+      OrderedProduct._id,
+      {
+        quantity: newQty,
+        inStock: newQty > 0,
+      },
+      { new: true, session },
+    );
 
-    await ProductServices.updateProduct(productId, updateData)
+    await session.commitTransaction();
+    session.endSession();
 
-    // Create and save order
-    const order = new Order(orderWithPrice)
-    const result = await order.save({ session })
-
-    // Commit the transaction
-    await session.commitTransaction()
-    session.endSession()
-
-    return result
+    return result[0];
   } catch (error) {
-    // If anything fails, abort the transaction
-    await session.abortTransaction()
-    session.endSession()
-    throw error
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
   }
-}
+};
+
+const getOrders = async () => {
+  const result = await Order.find().populate('product').populate('user')
+  return result;
+};
+
+const getSingleOrder = async (ProductId: string) => {
+  const result = await Product.findById(ProductId);
+  return result;
+};
+
+const deleteOrder = async (orderId: string) => {
+  const deleteSingleProduct = await Product.findOneAndUpdate(
+    { id: orderId },
+    { isDeleted: true },
+    { new: true },
+  );
+  return deleteSingleProduct;
+};
 
 const getRevenueFromDB = async () => {
   const result = await Order.aggregate([
     {
       $group: {
         _id: null,
-        totalRevenue: { $sum: { $toDouble: "$totalPrice" } },
+        totalRevenue: { $sum: { $toDouble: '$totalPrice' } },
       },
     },
-  ])
-  const totalRevenue = result.length > 0 ? result[0].totalRevenue : 0
-  return totalRevenue
-}
+  ]);
+  const totalRevenue = result.length > 0 ? result[0].totalRevenue : 0;
+  return totalRevenue;
+};
 
 export const OrderServices = {
-  createOrderIntoDB,
+  createOrder,
+  getOrders,
+  getSingleOrder,
+  deleteOrder,
   getRevenueFromDB,
-  checkStockAvailability,
-}
+};
