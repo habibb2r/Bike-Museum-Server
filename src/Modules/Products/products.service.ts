@@ -3,7 +3,7 @@ import { Product } from "./products.model"
 import type mongoose from "mongoose"
 
 const createProduct = async (payload: TProduct): Promise<TProduct> => {
-  const result = await Product.createOrUpdate(payload)
+  const result = await Product.createOrUpdate(payload) 
   return result
 }
 
@@ -24,7 +24,7 @@ const getProducts = async (query: Record<string, unknown>) => {
   const filterQuery = searchQuery.find(queryObj)
 
   const page = Number(query?.page || 1)
-  const limit = Number(query?.limit || 10)
+  const limit = Number(query?.limit )
   const skip = (page - 1) * limit
   const paginatedQuery = filterQuery.skip(skip).limit(limit)
 
