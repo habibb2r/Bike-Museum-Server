@@ -6,8 +6,9 @@ import { OrderValidation } from "./order.validation"
 const router = express.Router()
 
 router.post("/create-order", validateRequest(OrderValidation.orderValidationSchema), OrderController.createOrder)
-router.get("/", OrderController.getOrders)
-router.delete('/:id', );
+router.get("/", OrderController.getOrders);
+router.post("/get-user-order-data", OrderController.getUserOrdersByUserId);
+router.delete('/delete-order', OrderController.deleteOrder)
 
 router.get("/revenue", OrderController.getRevenue)
 

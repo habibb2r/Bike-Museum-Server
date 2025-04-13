@@ -56,19 +56,25 @@ const getOrders = async () => {
   return result;
 };
 
+const getOrdersByUserId = async (userId: string) => {
+  const orders = await Order.find({ user: userId }).populate('product'); 
+  return orders;
+};
+
 const getSingleOrder = async (ProductId: string) => {
   const result = await Product.findById(ProductId);
   return result;
 };
 
 const deleteOrder = async (orderId: string) => {
-  const deleteSingleProduct = await Product.findOneAndUpdate(
-    { id: orderId },
+  const deletedOrder = await Order.findOneAndUpdate(
+    { _id: orderId },
     { isDeleted: true },
-    { new: true },
+    { new: true }
   );
-  return deleteSingleProduct;
+  return deletedOrder;
 };
+
 
 const getRevenueFromDB = async () => {
   const result = await Order.aggregate([
@@ -89,4 +95,5 @@ export const OrderServices = {
   getSingleOrder,
   deleteOrder,
   getRevenueFromDB,
+  getOrdersByUserId,
 };
