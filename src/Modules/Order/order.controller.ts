@@ -26,10 +26,9 @@ const getOrders = catchAsync(async (req, res) => {
 });
 
 const getUserOrdersByUserId = catchAsync(async (req: Request, res: Response) => {
-  const { userId } = req.body;
 
-  const result = await OrderServices.getOrdersByUserId(userId);
-
+  const { id } = req.params;  
+  const result = await OrderServices.getOrdersByUserId(id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Successfully fetched user's orders",

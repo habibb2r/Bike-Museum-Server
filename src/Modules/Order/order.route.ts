@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.post("/create-order", validateRequest(OrderValidation.orderValidationSchema), OrderController.createOrder)
 router.get("/", OrderController.getOrders);
-router.put("/get-user-order-data", OrderController.getUserOrdersByUserId);
+router.get("/get-user-order-data/:id", OrderController.getUserOrdersByUserId);
 router.delete('/delete-order/:id', OrderController.deleteOrder)
 
 router.get("/revenue", OrderController.getRevenue)

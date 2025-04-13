@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import type { TOrder } from './order.interface';
 import { Order } from './order.model';
 import AppError from '../../ErrorHandlers/AppError';
