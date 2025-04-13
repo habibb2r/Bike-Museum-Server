@@ -14,6 +14,9 @@ const getAllUserFromDB = async () => {
 
 const getSingleUserFromDB = async (email: string) => {
   const result = await createUserModel.findOne({ email });
+  if (!result) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
   return result;
 };
 
@@ -55,25 +58,23 @@ const updateUserProfileInDB = async (payload: any) => {
   if (!payload?.name) {
     throw new AppError(StatusCodes.NO_CONTENT, 'No Name Provided');
   }
+
   try {
     const data = await createUserModel.updateOne(
       { email: payload?.email },
-      {
-        $set: {
-          name: payload?.name,
-        },
-      },
+      { $set: { name: payload?.name } },
     );
-    const result = data?.modifiedCount > 0 ? { name: payload?.name } : {};
-    return result;
-  // eslint-disable-next-line no-unused-vars
+
+    if (data.modifiedCount === 0) {
+      throw new AppError(StatusCodes.BAD_REQUEST, 'User profile update failed');
+    }
+
+    return { name: payload?.name };
   } catch (error) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      'Unable to update user profile',
-    );
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Unable to update user profile');
   }
 };
+
 
 const updateUserPasswordInDB = async (payload: any) => {
   const session = await mongoose.startSession();
