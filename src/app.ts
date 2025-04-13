@@ -9,11 +9,8 @@ const app: Application = express();
 import cookieParser from 'cookie-parser';
 import UserRouter from './Modules/User/user.route';
 import bodyParser from 'body-parser';
-<<<<<<< HEAD
 import { paymentRoutes } from './Modules/payment/payment.routes';
 //parser
-=======
->>>>>>> 70f42d4dfe8c610bb8a88cb120409bccb5112c74
 
 app.use(express.json());
 app.use(cookieParser());
