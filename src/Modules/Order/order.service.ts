@@ -52,22 +52,23 @@ const createOrder = async (payload: TOrder) => {
 };
 
 const getOrders = async () => {
-  const result = await Order.find().populate('product').populate('user')
+  const result = await Order.find().populate('product').populate('user');
   return result;
 };
 
-const getSingleOrder = async (ProductId: string) => {
-  const result = await Product.findById(ProductId);
+const getOrdersByEmail = async (email: string) => {
+  const result = await Order.find({email:email});
+  return result;
+};
+
+const getSingleOrder = async (id: string) => {
+  const result = await Order.findById(id);
   return result;
 };
 
 const deleteOrder = async (orderId: string) => {
-  const deleteSingleProduct = await Product.findOneAndUpdate(
-    { id: orderId },
-    { isDeleted: true },
-    { new: true },
-  );
-  return deleteSingleProduct;
+  const deleteSingleOrder = await Order.findByIdAndDelete(orderId)
+  return deleteSingleOrder;
 };
 
 const getRevenueFromDB = async () => {
@@ -89,4 +90,5 @@ export const OrderServices = {
   getSingleOrder,
   deleteOrder,
   getRevenueFromDB,
+  getOrdersByEmail
 };
