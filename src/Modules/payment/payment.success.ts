@@ -1,16 +1,14 @@
-import { Request, Response } from 'express';
-import { Order } from '../Order/order.model';
+import { Request, Response } from "express";
+import { Order } from "../Order/order.model";
+import { frontendBaseUrl } from "../../utils/baseUrl";
+
 
 export const successPayment = async (req: Request, res: Response) => {
-  const order = await Order.findOneAndUpdate(
-    { transactionId: req.params.tran_id },
-    { status: 'paid' },
-    { new: true },
-  );
-
-  if (order) {
-    res.redirect(
-      `http://localhost:5173/payment/success/${req.params.tran_Id}`,
+    await Order.findOneAndUpdate(
+      { transactionId: req.params.tran_id },
+      { status: 'paid' },
+      { new: true },
     );
-  }
-};
+  
+  res.redirect(`${frontendBaseUrl}/products/success-payment/${req.params.tran_id}`) //after successfully payment it will redirect to frontend(local)
+  };

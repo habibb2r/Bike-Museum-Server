@@ -1,3 +1,4 @@
+import { frontendBaseUrl } from "../../utils/baseUrl";
 import { Order } from "../Order/order.model";
 import { Product } from "../Products/products.model";
 import { Request, Response } from "express";
@@ -16,10 +17,6 @@ export const cancelPayment = async (req: Request, res: Response) => {
       });
     }
   
-if(updatedOrder){
-  res.redirect(
-    `http://localhost:5173/payment/cancel/${req.params.tran_Id}`,
-  );
-}
+    res.redirect(`${frontendBaseUrl}/products/cancel-payment/${req.params.tran_id}`) 
   };
   

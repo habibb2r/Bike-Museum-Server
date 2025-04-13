@@ -11,4 +11,4 @@ router.post('/success/:tran_id', successPayment);
 router.post('/failed/:tran_id', failedPayment);
 router.post('/cancel/:tran_id', cancelPayment);
 
-export const payementRoutes = router;
+export const paymentRoutes = router;

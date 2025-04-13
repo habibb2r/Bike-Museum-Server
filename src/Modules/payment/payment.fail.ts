@@ -1,3 +1,4 @@
+import { frontendBaseUrl } from "../../utils/baseUrl";
 import { Order } from "../Order/order.model";
 import { Product } from "../Products/products.model";
 import { Request, Response } from "express";
@@ -15,11 +16,7 @@ export const failedPayment = async (req: Request, res: Response) => {
         $set: { inStock: true },
       });
     }
-
-    if(updatedOrder){
-      res.redirect(
-        `http://localhost:5173/payment/failed/${req.params.tran_Id}`,
-      );
-    }
+  
+    res.redirect(`${frontendBaseUrl}/products/failed-payment/${req.params.tran_id}`) 
   };
   

@@ -8,8 +8,8 @@ import AuthRouter from './Modules/Auth/auth.route';
 const app: Application = express();
 import cookieParser from 'cookie-parser';
 import UserRouter from './Modules/User/user.route';
-import { payementRoutes } from './Modules/payment/payment.routes';
 import bodyParser from 'body-parser';
+import { paymentRoutes } from './Modules/payment/payment.routes';
 //parser
 
 app.use(express.json());
@@ -26,7 +26,7 @@ app.use('/api/products', ProductRoutes);
 app.use('/api/orders', OrderRoutes);
 app.use('/api/auth', AuthRouter);
 app.use('/api/user', UserRouter);
-app.use('/api/payment', payementRoutes);
+app.use('/api/payment', paymentRoutes );
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
