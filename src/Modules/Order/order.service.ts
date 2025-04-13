@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import type { TOrder } from './order.interface';
 import { Order } from './order.model';
 import AppError from '../../ErrorHandlers/AppError';
@@ -52,24 +52,29 @@ const createOrder = async (payload: TOrder) => {
 };
 
 const getOrders = async () => {
-  const result = await Order.find().populate('product').populate('user');
+  const result = await Order.find().populate('product').populate('user')
   return result;
 };
 
-const getOrdersByEmail = async (email: string) => {
-  const result = await Order.find({email:email});
-  return result;
+const getOrdersByUserId = async (userId: string) => {
+  const orders = await Order.find({ user: userId }).populate('product'); 
+  return orders;
 };
 
-const getSingleOrder = async (id: string) => {
-  const result = await Order.findById(id);
+const getSingleOrder = async (ProductId: string) => {
+  const result = await Product.findById(ProductId);
   return result;
 };
 
 const deleteOrder = async (orderId: string) => {
-  const deleteSingleOrder = await Order.findByIdAndDelete(orderId)
-  return deleteSingleOrder;
+  const deletedOrder = await Order.findOneAndUpdate(
+    { _id: orderId },
+    { isDeleted: true },
+    { new: true }
+  );
+  return deletedOrder;
 };
+
 
 const getRevenueFromDB = async () => {
   const result = await Order.aggregate([
@@ -90,5 +95,5 @@ export const OrderServices = {
   getSingleOrder,
   deleteOrder,
   getRevenueFromDB,
-  getOrdersByEmail
+  getOrdersByUserId,
 };
