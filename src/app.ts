@@ -10,7 +10,6 @@ import cookieParser from 'cookie-parser';
 import UserRouter from './Modules/User/user.route';
 import { payementRoutes } from './Modules/payment/payment.routes';
 import bodyParser from 'body-parser';
-//parser
 
 app.use(express.json());
 app.use(cookieParser());

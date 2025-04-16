@@ -39,7 +39,8 @@ const createUserSchema = new Schema<TCreateUser, TLogin>(
     return await bcrypt.compare(plainTextPassword, hashedPassword);
   };
   createUserSchema.statics.isUserExistsByCustomId = async function (email: string) {
-    return await createUserModel.findOne({ email }).select('+password');
+    return await createUserModel.findOne({ email });
+
   };
   
   export const createUserModel = model<TCreateUser, TLogin>('User', createUserSchema);
