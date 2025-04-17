@@ -12,5 +12,6 @@ UserRouter.get('/getSingle/:email', verifyUserOrAdmin, UserController.getSingleU
 UserRouter.patch('/update', verifyAdmin, UserController.updateUserStatus);
 UserRouter.patch('/update/user', verifyCustomer,  UserController.updateUserProfile);
 UserRouter.patch('/update/password', verifyCustomer,  UserController.updateUserPassword);
+UserRouter.patch("/admin/change-user-role",verifyAdmin,UserController.changeUserRole);
 
 export default UserRouter
