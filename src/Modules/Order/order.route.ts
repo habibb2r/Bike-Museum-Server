@@ -9,7 +9,6 @@ router.post("/create-order", validateRequest(OrderValidation.orderValidationSche
 router.get("/", OrderController.getOrders);
 router.get("/get-user-order-data/:id", OrderController.getUserOrdersByUserId);
 router.delete('/delete-order/:id', OrderController.deleteOrder)
-
 router.get("/revenue", OrderController.getRevenue)
 
 export const OrderRoutes = router

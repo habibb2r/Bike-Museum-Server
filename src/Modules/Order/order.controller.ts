@@ -50,7 +50,7 @@ const getSingleOrder = catchAsync(async (req, res) => {
 });
 
 const deleteOrder = catchAsync(async (req, res) => {
-  const id = req.query.ProductId as string;
+  const id = req.params.ProductId as string;
   const result = await OrderServices.deleteOrder(id);
   res.status(200).json({ success: true, data: result });
 });
@@ -76,5 +76,4 @@ export const OrderController = {
   getSingleOrder,
   getRevenue,
   getUserOrdersByUserId,
-
 };
