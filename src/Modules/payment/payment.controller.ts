@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import SSLCommerzPayment from 'sslcommerz-lts';
 import { Product } from '../Products/products.model';
 import { createUserModel } from '../User/user.model';
+import { backendBaseUrl } from '../../utils/baseUrl';
 
 const store_id = process.env.STORE_ID;
 const store_passwd = process.env.STORE_PASS;
@@ -26,10 +27,10 @@ export const initiatePayment = async (req: Request, res: Response) => {
     total_amount: tran_id,
     currency: 'BDT',
     tran_id: tran_id,
-    success_url: `https://bike-museum-server-tan.vercel.app/api/payment/success/${tran_id}`,
-    fail_url: `https://bike-museum-server-tan.vercel.app/api/payment/failed/${tran_id}`,
-    cancel_url: `https://bike-museum-server-tan.vercel.app/api/payment/cancel/${tran_id}`,
-    ipn_url: 'http://localhost:5000/ipn',
+    success_url: `${backendBaseUrl}/api/payment/success/${tran_id}`,
+    fail_url: `${backendBaseUrl}/api/payment/failed/${tran_id}`,
+    cancel_url: `${backendBaseUrl}/api/payment/cancel/${tran_id}`,
+    ipn_url: `${backendBaseUrl}/ipn`,
     shipping_method: 'Courier',
     product_name: orderProduct?.name,
     product_category: orderProduct?.category,
@@ -72,4 +73,3 @@ export const initiatePayment = async (req: Request, res: Response) => {
       res.status(500).json({ message: 'Payment initiation failed', error });
     });
 };
-

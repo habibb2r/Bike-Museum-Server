@@ -35,6 +35,20 @@ const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const changeUserRole = catchAsync(async (req: Request, res: Response) => {
+  const { id, role }: { id: string, role: 'admin' | 'user' } = req.body; 
+
+  const result = await UserServices.changeUserRoleInDB(id, role);
+
+  sendResponse(res, {
+    success: true,
+    message: 'User role updated successfully',
+    data: result,
+    statusCode: StatusCodes.OK,
+  });
+});
+
+
 const updateUserProfile = catchAsync(async (req: Request, res: Response) => {
   const getUserData = req.body;
   const result = await UserServices.updateUserProfileInDB({
@@ -62,10 +76,11 @@ const updateUserPassword = catchAsync(async (req: Request, res: Response) => {
     });
   })
 
-export const UserController = {
-  getAllUsers,
-  getSingleUser,
-  updateUserStatus,
-  updateUserProfile,
-  updateUserPassword
-};
+  export const UserController = {
+    getAllUsers,
+    getSingleUser,
+    updateUserStatus,
+    updateUserProfile,
+    updateUserPassword,
+    changeUserRole,
+  };

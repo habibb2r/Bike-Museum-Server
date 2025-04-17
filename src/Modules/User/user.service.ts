@@ -125,10 +125,34 @@ const updateUserPasswordInDB = async (payload: any) => {
   }
 };
 
+const changeUserRoleInDB = async (id: string, newRole: 'admin' | 'user') => {
+  const user = await createUserModel.findById(id);
+
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+
+  if (!['admin', 'user'].includes(newRole)) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid role provided');
+  }
+
+  if (user.role === newRole) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'User already has this role');
+  }
+
+  user.role = newRole;
+  const updatedUser = await user.save();
+  return updatedUser;
+};
+
+
+
 export const UserServices = {
   getAllUserFromDB,
   getSingleUserFromDB,
   updateUserStatusInDB,
   updateUserProfileInDB,
-  updateUserPasswordInDB
+  updateUserPasswordInDB,
+  changeUserRoleInDB,
 };
+
